@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dnimesol</title>
+    <meta name="Dnimesol JS13KGames" content="A-Frame game">
+    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    <script src="main.js"></script>   
+  </head>
+  <body>
+    <a-scene>
+      <a-camera>
+        <a-cursor color="#f2b3e1"></a-cursor>
+      </a-camera>
+      <a-sphere position="1 -0.5 -3" rotation="0 45 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1">
+         <a-animation attribute="position" to="0 2.2 -5" direction="alternate" dur="2000" repeat="indefinite"></a-animation>
+      </a-sphere>
+      <a-torus position="-1 0.5 -3" rotation="0 45 0" color="#c20752" metalness=0.5 scale-on-mouseenter="to: 1.2 1.2 1.2" scale-on-mouseleave="to: 1 1 1">
+         <a-animation attribute="position" to="-3 8 -10" direction="alternate" dur="4000" repeat="indefinite"></a-animation>
+      </a-torus>
+      <a-torus-knot position="0.5 6 -5" radius="1.25" color="#edff0f" metalness=0.5 follow="speed: 2"  scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1">
+      </a-torus-knot>
+      <a-sky color="#130433"></a-sky>
+    </a-scene>
+  </body>
+</html>

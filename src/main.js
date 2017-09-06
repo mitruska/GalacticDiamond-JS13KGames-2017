@@ -22,6 +22,30 @@ AFRAME.registerComponent('scale-on-mouseenter', {
     }
   });
 
+AFRAME.registerComponent('cursor-listener', {
+  init: function () {
+    var COLORS = ['red', 'green', 'blue'];
+    this.el.addEventListener('click', function (evt) {
+      var randomIndex = Math.floor(Math.random() * COLORS.length);
+      this.setAttribute('material', 'color', COLORS[randomIndex]);
+      console.log('I was clicked at: ', evt.detail.intersection.point);
+    });
+  }
+});
+
+AFRAME.registerComponent('select-on-fuse', {
+    schema: {
+      to: {default: '2.5 2.5 2.5'}
+    },
+    init: function () {
+      var data = this.data;
+      this.el.addEventListener('click', function () {
+        this.setAttribute('rotation', data.to);
+      });
+    }
+  });
+
+
 AFRAME.registerComponent('follow', {
   schema: {speed: {default: '2'}},
 
@@ -44,3 +68,15 @@ AFRAME.registerComponent('follow', {
 
   }
 });
+
+ AFRAME.registerComponent('random-torus-knot', {
+        init: function () {
+          this.el.setAttribute('geometry', {
+            primitive: 'torusKnot',
+            radius: Math.random() * 10,
+            radiusTubular: Math.random() * .75,
+            p: Math.round(Math.random() * 10),
+            q: Math.round(Math.random() * 10)
+          });
+        }
+      });

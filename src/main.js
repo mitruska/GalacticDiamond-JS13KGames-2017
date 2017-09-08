@@ -62,9 +62,73 @@ AFRAME.registerComponent('follow', {
     let toX = progress.x-0.01;
     let toY = progress.y;
     let toZ = progress.z+0.01;
-    console.log(progress);
+    // console.log(progress);
     this.el.setAttribute('position', {x: toX, y: toY, z: toZ});
-    console.log(this.el.getAttribute('position').x);
+    // console.log(this.el.getAttribute('position').x);
+
+  }
+});
+
+let back = false;
+let reverse = false;
+AFRAME.registerComponent('follow-circle', {
+
+  schema: {
+    rootA: {default: '0'},
+    rootB: {default: '0'},
+    rootRadius: {default: '3'},
+    speed: {default: '0.01'}
+},
+
+  init: function () {
+    let pos = this.el.getAttribute('position');
+    let initX = this.data.rootA - this.data.rootRadius;
+    let initY = this.data.rootB;
+    let initZ = pos.z;
+    this.el.setAttribute('position', {x: initX, y: initY, z: initZ});
+  },
+   update: function () {
+
+  },
+
+  tick: function (time, timeDelta) {
+    let progress = this.el.getAttribute('position');
+    let toX;
+    let toY;
+    let toZ = progress.z;
+    
+    // console.log(progress.x);
+    // console.log(this.data.rootA);
+    if( Math.abs((this.data.rootA + this.data.rootRadius) - progress.x) < 0.001 ){
+      back = false;
+      reverse = false;
+    }
+
+    if(Math.abs(progress.x - (this.data.rootA - this.data.rootRadius))<0.001){
+      back = true;
+      reverse = false;
+    }
+    if(Math.abs(this.data.rootA - progress.x)<0.001){
+      reverse = true;
+    }
+
+    if(back){
+      toX = progress.x - this.data.speed;
+    }
+    else {
+      toX = progress.x + this.data.speed;
+    }
+
+    if(reverse){
+      toY = this.data.rootB + Math.sqrt(Math.pow(this.data.rootRadius,2) - Math.pow((toX-this.data.rootA),2));
+    } 
+    else {
+      toY = this.data.rootB - Math.sqrt(Math.pow(this.data.rootRadius,2) - Math.pow((toX-this.data.rootA),2));
+    }
+      
+    this.el.setAttribute('position', {x: toX, y: toY, z: toZ});
+    // console.log(reverse);
+    // console.log(back);
 
   }
 });
@@ -80,3 +144,11 @@ AFRAME.registerComponent('follow', {
           });
         }
       });
+
+
+      function nextScene() {
+        console.log("next")
+    document.getElementById('scene1').setAttribute('visible', 'false');
+    document.getElementById('scene2').setAttribute('visible', 'true');
+    document.querySelector("a-sky").setAttribute('color','black');
+  };

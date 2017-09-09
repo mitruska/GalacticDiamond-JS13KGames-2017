@@ -4,7 +4,7 @@
     <title>Dnimesol</title>
     <meta name="Dnimesol JS13KGames" content="A-Frame game">
     <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>  
-    <script src="main.js"></script>   
+    <script src="components.js"></script>   
   </head>
   <body>
     <a-scene>
@@ -19,8 +19,9 @@
           <a-mixin id="yellow" material="color: yellow"></a-mixin>
           <a-mixin id="sphere" geometry="primitive: sphere"></a-mixin>
         </a-assets>
-        <a-entity position="0 2.2 4">
-          <a-entity camera look-controls wasd-controls>
+
+        <!--<a-entity position="0 2.2 4">
+          <a-entity camera="active:false" look-controls wasd-controls>
             <a-entity position="0 0 -1"
                       geometry="primitive: ring; radiusOuter: 0.016; radiusInner: 0.01;"
                       material="color:cyan; opacity:0.6; shader: flat"
@@ -33,7 +34,7 @@
                   fill="backwards" from="1 1 1" to="0.2 0.2 0.2" dur="1700"></a-animation>
             </a-entity>
           </a-entity>
-        </a-entity>
+        </a-entity>-->
          <!--<a-cursor color="#f2b3e1" fuse=true fusetimeout=2000> </a-cursor>   -->
 
     
@@ -43,17 +44,29 @@
         <a-sky color="#b9ffef"></a-sky>
 
 
-        <a-entity id="scene2" visible="false">
-              <a-sphere position="0 0 0" rotation="0 0 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1" cursor-listener >
-
-    </a-entity>
-
-    <a-entity id="scene1" visible="true">
-        <a-entity onclick="nextScene()" position="0.009 2.478 -7.976" scale="2.939 3.228 1" text="color:#b9ffef;width:7;height:25;letterSpacing:3;align:center;value:Start" geometry="primitive:plane" material="color:#a49a1e"></a-entity>
-<a-box position="-0.078 2.457 -10.716" rotation="0 -88.35 0" color="#c20752" metalness="0.5" scale-on-mouseenter="to:1.2 1.2 1.2" scale-on-mouseleave="" scale="4.373 4.373 4.373">
-          <a-animation attribute="scale"  to="5 6 1" direction="alternate" dur="4000" repeat="indefinite"></a-animation>
-        </a-box>
-        <a-sphere position="0 0 0" rotation="0 0 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1" cursor-listener >
+        <a-entity id="scene2" visible="true" startGame>
+          <a-entity id="gameCamera" position="0 0 -60">
+          <a-entity camera="active:true" look-controls wasd-controls>
+            <a-entity position="0 0 -1"
+                      geometry="primitive: ring; radiusOuter: 0.016; radiusInner: 0.01;"
+                      material="color:cyan; opacity:0.6; shader: flat"
+                      cursor="max-distance:20; fuse: true; fuseTimeout: 1700">
+                <a-animation begin="click" easing="ease-in" attribute="scale"
+                  fill="backwards" from="0.2 0.2 0.2" to="1 1 1" dur="150"></a-animation>
+                <a-animation begin="fusing" easing="ease-in" attribute="material.color"
+                  fill="backwards" from="#fa47bf" to="magenta" dur="1700"></a-animation>
+                <a-animation begin="fusing" easing="ease-in" attribute="scale"
+                  fill="backwards" from="1 1 1" to="0.2 0.2 0.2" dur="1700"></a-animation>
+            </a-entity>
+          </a-entity>
+        </a-entity>
+            <!--<a-entity position="-1.872 50.959 -84.143" scale="23.122 2.125 14.093" geometry="" animation="" material="color:#6f0647"></a-entity>
+           <a-entity position="-0.711 41.557 -67.131" scale="23.122 2.125 14.093" geometry="" animation="" material="color:#6f0647"></a-entity>
+          <a-entity position="-0.711 59.524 -95.07" scale="23.122 2.125 14.093" geometry="" animation="" material="color:#6f0647"></a-entity>   -->
+               
+               
+               
+               <a-sphere position="0 0 0" rotation="0 0 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1" cursor-listener >
             <!--<a-animation attribute="position" to="0 2.2 -5" direction="alternate" dur="2000" repeat="indefinite"></a-animation>-->
           <!--<a-animation attribute="rotation"
                 dur="10000"
@@ -67,9 +80,29 @@
         </a-torus>
         <!--<a-torus-knot position="0.5 6 -5" radius=3.487 radiusTubular=0.579 p=8 q=6 color="#edff0f" metalness=0.5 follow="speed: 2"  scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1">
         </a-torus-knot>-->
+              <a-sphere position="0 0 0" rotation="0 0 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1" cursor-listener >
+
     </a-entity>
 
-  
+
+
+
+    <a-entity id="start-menu" visible="true">
+
+      <a-entity position="-0.186 7.075 -10.364" scale="9.715 8.691 6.896" geometry="radiusTubular:0.1;primitive:torus" material="metalness:1;color:#207d68">
+        <a-animation attribute="scale" to="9 8 6" direction="alternate" dur="4000" repeat="indefinite"></a-animation>
+      </a-entity>
+      <a-entity onclick="nextScene()" position="0.009 7.32 -7.976" scale="2.939 3.228 1" text="align:center;color:#b9ffef;height:25;letterSpacing:3;value:Start;width:7" geometry="primitive:plane" material="color:#a49a1e"></a-entity>
+      <a-box position="-0.078 7.15 -10.716" rotation="0 -88.35 0" color="#c20752" metalness="0.5" scale="4.994630333716146 5.986066272657369 1.028886577951257">
+        <a-animation attribute="scale" to="5 6 6" direction="alternate" dur="4000" repeat="indefinite"></a-animation>
+      </a-box>
+    </a-entity>
+
+    <script src=main.js>
+
+    
+    </script>
+
     </a-scene>
   </body>
 </html>

@@ -1,154 +1,84 @@
-AFRAME.registerComponent('scale-on-mouseenter', {
-    schema: {
-      to: {default: '2.5 2.5 2.5'}
-    },
-    init: function () {
-      var data = this.data;
-      this.el.addEventListener('mouseenter', function () {
-        this.setAttribute('scale', data.to);
-      });
-    }
-  });
+let steps = [];
+let gameScene = document.getElementById('scene2');
+let pallette = ["rgb(238, 244, 66)","rgb(24, 89, 58)","rgb(89, 24, 46)"];
 
-  AFRAME.registerComponent('scale-on-mouseleave', {
-    schema: {
-      to: {default: '1 1 1'}
-    },
-    init: function () {
-      var data = this.data;
-      this.el.addEventListener('mouseleave', function () {
-        this.setAttribute('scale', data.to);
-      });
-    }
-  });
+//camera.setAttribute('animation', anim);
 
-AFRAME.registerComponent('cursor-listener', {
-  init: function () {
-    var COLORS = ['red', 'green', 'blue'];
-    this.el.addEventListener('click', function (evt) {
-      var randomIndex = Math.floor(Math.random() * COLORS.length);
-      this.setAttribute('material', 'color', COLORS[randomIndex]);
-      console.log('I was clicked at: ', evt.detail.intersection.point);
-    });
-  }
-});
+let createSteps = () => {
+  let initX = 0.711; 
+  let initY = 41.557;
+  let initZ = -67.131;
 
-AFRAME.registerComponent('select-on-fuse', {
-    schema: {
-      to: {default: '2.5 2.5 2.5'}
-    },
-    init: function () {
-      var data = this.data;
-      this.el.addEventListener('click', function () {
-        this.setAttribute('rotation', data.to);
-      });
-    }
-  });
+  let deltaX = 0;
+  let deltaY = 0;
+  let deltaZ = 0;
+// let deltaY = 100;
+// let deltaZ = -10;
 
+  for(let i = 0; i<100; i++){
+    let step = document.createElement('a-box');
+    let ball = document.createElement('a-sphere');
 
-AFRAME.registerComponent('follow', {
-  schema: {speed: {default: '2'}},
+    let newX = 100*Math.cos(deltaX);
+    let newY = 100*Math.sin(deltaX);
+    //let newY = Math.sqrt(Math.pow(10) - Math.pow(newX));
 
-  init: function () {
+//     float x = r*cos(t) + h;
+// float y = r*sin(t) + k;
 
- 
-  },
-   update: function () {
+    let newZ = initZ + deltaZ;
 
-  },
+    //let newColor = pallette[Math.floor(Math.random()*pallette.length)];
+    let newColor = pallette[i%3];
 
-  tick: function (time, timeDelta) {
-    let progress = this.el.getAttribute('position');
-    let toX = progress.x-0.01;
-    let toY = progress.y;
-    let toZ = progress.z+0.01;
-    // console.log(progress);
-    this.el.setAttribute('position', {x: toX, y: toY, z: toZ});
-    // console.log(this.el.getAttribute('position').x);
+    ball.setAttribute('position',{x:newX, y:newY, z:newZ});
+    //step.setAttribute('position',{x: initX+deltaX, y: initY+deltaY, z: initZ+deltaZ});
+    step.setAttribute('scale',{x: 23.122, y: 2.125, z: 14.093});
+    //step.setAttribute('material','color', newColor);
+    step.setAttribute('scale-on-mouseenter', 'to:30 3 20');
+    step.setAttribute('scale-on-mouseleave', 'to:23.122, 2.125, 14.093');
+    step.setAttribute('cursor-listener', '');
 
-  }
-});
+    // gameScene.appendChild(step);
+    // step.appendChild(ball);
 
-let back = false;
-let reverse = false;
-AFRAME.registerComponent('follow-circle', {
-
-  schema: {
-    rootA: {default: '0'},
-    rootB: {default: '0'},
-    rootRadius: {default: '3'},
-    speed: {default: '0.01'}
-},
-
-  init: function () {
-    let pos = this.el.getAttribute('position');
-    let initX = this.data.rootA - this.data.rootRadius;
-    let initY = this.data.rootB;
-    let initZ = pos.z;
-    this.el.setAttribute('position', {x: initX, y: initY, z: initZ});
-  },
-   update: function () {
-
-  },
-
-  tick: function (time, timeDelta) {
-    let progress = this.el.getAttribute('position');
-    let toX;
-    let toY;
-    let toZ = progress.z;
+    //ball.setAttribute('position',{x: initX+deltaX, y: initY+deltaY, z: initZ+deltaZ});
+    ball.setAttribute('scale',{x: 23.122, y: 4.125, z: 14.093});
+    // ball.setAttribute('material','color','red');
+    ball.setAttribute('scale-on-mouseenter', 'to:30 3 20');
+    ball.setAttribute('scale-on-mouseleave', 'to:23.122, 2.125, 14.093');
+    // ball.setAttribute('cursor-listener', '');
+    ball.setAttribute('material','color', newColor);
+    //ball.setAttribute('material', 'color', 'rgb(35, 125,104)');
+    ball.setAttribute('material', 'metalness', '0.5');
+    // ball.setAttribute('material', 'opacity', '0.3');
+    gameScene.appendChild(ball);
     
-    // console.log(progress.x);
-    // console.log(this.data.rootA);
-    if( Math.abs((this.data.rootA + this.data.rootRadius) - progress.x) < 0.001 ){
-      back = false;
-      reverse = false;
-    }
 
-    if(Math.abs(progress.x - (this.data.rootA - this.data.rootRadius))<0.001){
-      back = true;
-      reverse = false;
-    }
-    if(Math.abs(this.data.rootA - progress.x)<0.001){
-      reverse = true;
-    }
+    ball.addEventListener('click', function(evt) {
+        let camera = document.getElementById('gameCamera');
+        let anim = document.createElement('a-animation');
 
-    if(back){
-      toX = progress.x - this.data.speed;
-    }
-    else {
-      toX = progress.x + this.data.speed;
-    }
+        anim.setAttribute('attribute', 'position');
+        anim.setAttribute('from', camera.getAttribute('position'));
+        anim.setAttribute('to', ball.getAttribute('position'));
+        anim.setAttribute('dur', 1000);
+        anim.setAttribute('repeat', 1);
 
-    if(reverse){
-      toY = this.data.rootB + Math.sqrt(Math.pow(this.data.rootRadius,2) - Math.pow((toX-this.data.rootA),2));
-    } 
-    else {
-      toY = this.data.rootB - Math.sqrt(Math.pow(this.data.rootRadius,2) - Math.pow((toX-this.data.rootA),2));
-    }
-      
-    this.el.setAttribute('position', {x: toX, y: toY, z: toZ});
-    // console.log(reverse);
-    // console.log(back);
+        //anim.play();
 
+        let platformPos = ball.getAttribute('position');
+
+        camera.setAttribute('position', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });
+    })
+
+
+    deltaX+=20;
+   // deltaY+=30;
+    deltaZ+=-10;
+
+    console.log("making steps");
   }
-});
+}
 
- AFRAME.registerComponent('random-torus-knot', {
-        init: function () {
-          this.el.setAttribute('geometry', {
-            primitive: 'torusKnot',
-            radius: Math.random() * 10,
-            radiusTubular: Math.random() * .75,
-            p: Math.round(Math.random() * 10),
-            q: Math.round(Math.random() * 10)
-          });
-        }
-      });
-
-
-      function nextScene() {
-        console.log("next")
-    document.getElementById('scene1').setAttribute('visible', 'false');
-    document.getElementById('scene2').setAttribute('visible', 'true');
-    document.querySelector("a-sky").setAttribute('color','black');
-  };
+window.onload=createSteps();

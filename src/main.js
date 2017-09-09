@@ -1,4 +1,5 @@
 let steps = [];
+let camera = document.getElementById('gameCamera');
 let gameScene = document.getElementById('scene2');
 let pallette = ["rgb(238, 244, 66)","rgb(24, 89, 58)","rgb(89, 24, 46)"];
 
@@ -53,24 +54,34 @@ let createSteps = () => {
     ball.setAttribute('material', 'metalness', '0.5');
     // ball.setAttribute('material', 'opacity', '0.3');
     gameScene.appendChild(ball);
+
+
     
 
     ball.addEventListener('click', function(evt) {
-        let camera = document.getElementById('gameCamera');
+
+        let platformPos = ball.getAttribute('position');
         let anim = document.createElement('a-animation');
 
         anim.setAttribute('attribute', 'position');
         anim.setAttribute('from', camera.getAttribute('position'));
-        anim.setAttribute('to', ball.getAttribute('position'));
+        //anim.setAttribute('to', ball.getAttribute('position'));
         anim.setAttribute('dur', 1000);
         anim.setAttribute('repeat', 1);
 
+        anim.setAttribute('to', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });
+            
+        //camera.appendChild(anim);
+
         //anim.play();
 
-        let platformPos = ball.getAttribute('position');
+    
+        camera.setAttribute('position', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });   
+        
 
-        camera.setAttribute('position', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });
-    })
+  
+
+})
 
 
     deltaX+=20;
@@ -81,4 +92,14 @@ let createSteps = () => {
   }
 }
 
-window.onload=createSteps();
+let startButton = document.getElementById('start-button');
+
+startButton.addEventListener('click', function(){
+        camera.setAttribute('position', '0 0 -60');
+        camera.setAttribute('rotation', '0 0 0');
+
+})
+
+window.onload= function () {
+  createSteps();
+}

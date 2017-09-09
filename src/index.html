@@ -45,7 +45,7 @@
 
 
         <a-entity id="scene2" visible="true" startGame>
-          <a-entity id="gameCamera" position="0 0 -60">
+          <a-entity id="gameCamera" position="0 3 10">
           <a-entity camera="active:true" look-controls wasd-controls>
             <a-entity position="0 0 -1"
                       geometry="primitive: ring; radiusOuter: 0.016; radiusInner: 0.01;"
@@ -92,12 +92,12 @@
       <a-entity position="-0.186 7.075 -10.364" scale="9.715 8.691 6.896" geometry="radiusTubular:0.1;primitive:torus" material="metalness:1;color:#207d68">
         <a-animation attribute="scale" to="9 8 6" direction="alternate" dur="4000" repeat="indefinite"></a-animation>
       </a-entity>
-      <a-entity onclick="nextScene()" position="0.009 7.32 -7.976" scale="2.939 3.228 1" text="align:center;color:#b9ffef;height:25;letterSpacing:3;value:Start;width:7" geometry="primitive:plane" material="color:#a49a1e"></a-entity>
+      <a-entity id="start-button" position="0.009 7.32 -7.976" scale="2.939 3.228 1" text="align:center;color:#b9ffef;height:25;letterSpacing:3;value:Start;width:7" geometry="primitive:plane" material="color:#a49a1e"></a-entity>
       <a-box position="-0.078 7.15 -10.716" rotation="0 -88.35 0" color="#c20752" metalness="0.5" scale="4.994630333716146 5.986066272657369 1.028886577951257">
         <a-animation attribute="scale" to="5 6 6" direction="alternate" dur="4000" repeat="indefinite"></a-animation>
       </a-box>
     </a-entity>
-
+    <!--click="nextScene()"-->
     <script src=main.js>
 
     

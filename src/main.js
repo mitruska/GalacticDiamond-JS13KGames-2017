@@ -10,6 +10,7 @@ let platforms = [];
 let score = 0;
 let pointsCount = 0;
 let level = 1;
+let lim = 0; //time limit
 
 let isStarted = false;
 let isWon = false;
@@ -71,7 +72,7 @@ let createSteps = (count) => {
       point.addEventListener('click', function(evt) {
         if(isStarted){
           score++;
-          displayScore.setAttribute('text','value', 'score: ' + score + ' / ' + pointsCount);
+          displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
           gameScene.removeChild(this);
           points.splice(points.indexOf(this),1);
           console.log(score);
@@ -99,8 +100,8 @@ let createSteps = (count) => {
         anim.setAttribute('to', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });
             
         //camera.appendChild(anim);
-    
-        camera.setAttribute('position', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });  
+
+
       }     
     })
 
@@ -151,12 +152,22 @@ startButton.addEventListener('click', function(){
   if(!isStarted){
     camera.setAttribute('position', '0 0 -60');
     camera.setAttribute('rotation', '0 0 0');
-    displayScore.setAttribute('text','value', 'score: ' + score + ' / ' + pointsCount);
+    displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
     isStarted = true;
     //clean();
   }       
 })
 
+let timeOut = (limit) => {
+  lim = limit;
+  let timer = setInterval(function(){
+    lim--;
+    displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount 
+    + "  Remaining time: " + lim );
+    console.log(lim);  
+    if(lim == 0){clearInterval(timer);}
+  },1000)
+}
 
 let restart = () => {
   level = 1;
@@ -169,13 +180,14 @@ let restart = () => {
 }
 
 let nextLevel = () => {
+  let limit = 20;
   level++;
   score = 0;
   pointsCount = 0;
   clean();
   moveCameraToBegin();
   generateLevel(level);
-  displayScore.setAttribute('text','value', 'score: ' + score + ' / ' + pointsCount);  
+  displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
 }
 
 let moveCameraToBegin = () => {
@@ -208,26 +220,32 @@ let generateLevel = (lvl) => {
     switch(lvl) {
       case(1):{
         createSteps(10);
+        //timeOut(10*2);
         setPortalPosition();
         break;
       }
       case(2):{
         createSteps(30);
+        timeOut(30*2);
         setPortalPosition();        
         break;
       }
       case(3):{
         createSteps(50);
+        timeOut(50*2);
         setPortalPosition();        
         break;
       }
       case(4):{
         createSteps(80);
+        timeOut(80*2);        
         setPortalPosition();        
         break;
       }
       default:{
-        createSteps(lvl+Math.floor(Math.random() * 200 + 100 ));
+        let dif = lvl+Math.floor(Math.random() * 200 + 100 );
+        createSteps(dif);
+        setTimeout(dif*2);
         setPortalPosition();        
         break;
       }
@@ -238,6 +256,5 @@ let generateLevel = (lvl) => {
 window.onload= function () {
   generateLevel(1);
   gameScene.appendChild(bigDiamond);  
-  //setPortalPosition();
- 
+  //setPortalPosition(); 
 }

@@ -80,7 +80,50 @@ AFRAME.registerComponent('follow', {
     // console.log(progress);
     this.el.setAttribute('position', {x: toX, y: toY, z: toZ});
     // console.log(this.el.getAttribute('position').x);
+  }
+});
 
+
+AFRAME.registerComponent('rotate', {
+  schema: {speed: {default: '2'}},
+
+  init: function () {
+
+ 
+  },
+   update: function () {
+
+  },
+
+  tick: function (time, timeDelta) {
+    let progress = this.el.getAttribute('rotation');
+    let toX = progress.x;
+    let toY = progress.y + 1;
+    let toZ = progress.z;
+    // console.log(progress);
+    this.el.setAttribute('rotation', {x: toX, y: toY, z: toZ});
+  }
+});
+
+
+AFRAME.registerComponent('pump', {
+  schema: {speed: {default: '2'}},
+
+  init: function () {
+
+ 
+  },
+   update: function () {
+
+  },
+
+  tick: function (time, timeDelta) {
+    let progress = this.el.getAttribute('position');
+    let toX = progress.x;
+    let toY = progress.y;
+    let toZ = progress.z;
+    // console.log(progress);
+    this.el.setAttribute('position', {x: toX, y: toY, z: toZ});
   }
 });
 

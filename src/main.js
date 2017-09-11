@@ -3,9 +3,21 @@ let camera = document.getElementById('gameCamera');
 let gameScene = document.getElementById('scene2');
 let pallette = ["rgb(238, 244, 66)","rgb(24, 89, 58)","rgb(89, 24, 46)"];
 
+let points = [];
+let score = 0;
+let pointsCount = 0;
+
+let isStarted = false;
+let endPosition = 0;
+
+let displayScore = document.getElementById('score');
+
 //camera.setAttribute('animation', anim);
 
 let createSteps = () => {
+  let platformCount = 100;
+  let radious = 100;
+
   let initX = 0.711; 
   let initY = 41.557;
   let initZ = -67.131;
@@ -13,54 +25,56 @@ let createSteps = () => {
   let deltaX = 0;
   let deltaY = 0;
   let deltaZ = 0;
-// let deltaY = 100;
-// let deltaZ = -10;
 
-  for(let i = 0; i<100; i++){
-    let step = document.createElement('a-box');
-    let ball = document.createElement('a-sphere');
+  for(let i = 0; i<platformCount; i++){
+    let point;
+    let platform = document.createElement('a-sphere');;
 
-    let newX = 100*Math.cos(deltaX);
-    let newY = 100*Math.sin(deltaX);
-    //let newY = Math.sqrt(Math.pow(10) - Math.pow(newX));
-
-//     float x = r*cos(t) + h;
-// float y = r*sin(t) + k;
-
+    let newX = radious*Math.cos(deltaX);
+    let newY = radious*Math.sin(deltaX);
     let newZ = initZ + deltaZ;
 
-    //let newColor = pallette[Math.floor(Math.random()*pallette.length)];
     let newColor = pallette[i%3];
-
-    ball.setAttribute('position',{x:newX, y:newY, z:newZ});
-    //step.setAttribute('position',{x: initX+deltaX, y: initY+deltaY, z: initZ+deltaZ});
-    step.setAttribute('scale',{x: 23.122, y: 2.125, z: 14.093});
-    //step.setAttribute('material','color', newColor);
-    step.setAttribute('scale-on-mouseenter', 'to:30 3 20');
-    step.setAttribute('scale-on-mouseleave', 'to:23.122, 2.125, 14.093');
-    step.setAttribute('cursor-listener', '');
-
-    // gameScene.appendChild(step);
-    // step.appendChild(ball);
-
-    //ball.setAttribute('position',{x: initX+deltaX, y: initY+deltaY, z: initZ+deltaZ});
-    ball.setAttribute('scale',{x: 23.122, y: 4.125, z: 14.093});
-    // ball.setAttribute('material','color','red');
-    ball.setAttribute('scale-on-mouseenter', 'to:30 3 20');
-    ball.setAttribute('scale-on-mouseleave', 'to:23.122, 2.125, 14.093');
-    // ball.setAttribute('cursor-listener', '');
-    ball.setAttribute('material','color', newColor);
-    //ball.setAttribute('material', 'color', 'rgb(35, 125,104)');
-    ball.setAttribute('material', 'metalness', '0.5');
-    // ball.setAttribute('material', 'opacity', '0.3');
-    gameScene.appendChild(ball);
-
-
     
+    platform.setAttribute('position',{x:newX, y:newY, z:newZ});
+    platform.setAttribute('scale',{x: 23.122, y: 4.125, z: 14.093});
+    platform.setAttribute('scale-on-mouseenter', 'to:30 5 20');
+    platform.setAttribute('scale-on-mouseleave', 'to:23.122, 4.125, 14.093');
+    platform.setAttribute('material','color', newColor);
+    platform.setAttribute('material', 'metalness', '0.5');
 
-    ball.addEventListener('click', function(evt) {
+    gameScene.appendChild(platform); 
+            
+    if(i%10==0 || i%15==0){
+      pointsCount++;
+      point = document.createElement('a-octahedron');
 
-        let platformPos = ball.getAttribute('position');
+      point.setAttribute('position',{x:newX-5, y:newY+10, z:newZ});
+      point.setAttribute('scale',{x: 2, y: 5, z: 2});
+      point.setAttribute('material','color', '#38e4be');
+      point.setAttribute('scale-on-mouseenter', 'to:3 6 3');
+      point.setAttribute('scale-on-mouseleave', 'to:2, 5, 2');
+      point.setAttribute('cursor-listener', '');
+      point.setAttribute('rotate', '');
+
+
+      point.addEventListener('click', function(evt) {
+        if(isStarted){
+          score++;
+          displayScore.setAttribute('text','value', 'score: ' + score + ' / ' + pointsCount);
+          gameScene.removeChild(this);
+  
+          console.log(score);
+        }     
+      })
+
+      gameScene.appendChild(point);
+    }
+
+    platform.addEventListener('click', function(evt) {
+
+      if(isStarted) {
+        let platformPos = platform.getAttribute('position');
         let anim = document.createElement('a-animation');
 
         anim.setAttribute('attribute', 'position');
@@ -72,34 +86,40 @@ let createSteps = () => {
         anim.setAttribute('to', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });
             
         //camera.appendChild(anim);
-
-        //anim.play();
-
     
-        camera.setAttribute('position', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });   
-        
-
-  
-
-})
-
+        camera.setAttribute('position', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });  
+      }     
+    })
 
     deltaX+=20;
    // deltaY+=30;
     deltaZ+=-10;
 
+    if(i==platformCount){
+      platform.getAttribute('position');
+    }
+
     console.log("making steps");
   }
+
+
 }
 
 let startButton = document.getElementById('start-button');
 
 startButton.addEventListener('click', function(){
-        camera.setAttribute('position', '0 0 -60');
-        camera.setAttribute('rotation', '0 0 0');
 
+  if(!isStarted){
+    camera.setAttribute('position', '0 0 -60');
+    camera.setAttribute('rotation', '0 0 0');
+    displayScore.setAttribute('text','value', 'score: ' + score + ' / ' + pointsCount);
+    isStarted = true;
+  }       
 })
+
+
 
 window.onload= function () {
   createSteps();
+  //displayScore.setAttribute('text', 'value', ' ' );
 }

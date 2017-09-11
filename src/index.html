@@ -50,7 +50,7 @@
               <a-entity id="score" position="0 -15 -20" scale="5.021 4.475 1" text="value:;color:#018b88;align:center;height:25;letterSpacing:3;width:7" geometry="primitive:plane" material="opacity:0;color:#a49a1e"></a-entity>                         
             <a-entity position="0 0 -1"
                       geometry="primitive: ring; radiusOuter: 0.016; radiusInner: 0.01;"
-                      material="color:cyan; opacity:0.6; shader: flat"
+                      material="color:#708e8a; opacity:0.6; shader: flat"
                       cursor="max-distance:20; fuse: true; fuseTimeout: 1700">
                 <!-- <a-animation begin="click" easing="ease-in" attribute="scale"
                   fill="backwards" from="0.2 0.2 0.2" to="1 1 1" dur="150"></a-animation> -->
@@ -61,13 +61,17 @@
             </a-entity>
           </a-entity>
         </a-entity>
+
+        <a-entity id="portal" position="0 0 -200" scale="9.715 8.691 6.896" geometry="radiusTubular:0.1;primitive:torus" material="metalness:1;color:#207d68">
+          <a-animation attribute="scale" from="50 50 50" to="30 30 8" direction="alternate" dur="4000" repeat="indefinite"></a-animation>
+        </a-entity>
             <!--<a-entity position="-1.872 50.959 -84.143" scale="23.122 2.125 14.093" geometry="" animation="" material="color:#6f0647"></a-entity>
            <a-entity position="-0.711 41.557 -67.131" scale="23.122 2.125 14.093" geometry="" animation="" material="color:#6f0647"></a-entity>
           <a-entity position="-0.711 59.524 -95.07" scale="23.122 2.125 14.093" geometry="" animation="" material="color:#6f0647"></a-entity>   -->
                
                
                
-               <a-sphere position="0 0 0" rotation="0 0 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1" cursor-listener >
+               <!-- <a-sphere position="0 0 0" rotation="0 0 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1" cursor-listener > -->
             <!--<a-animation attribute="position" to="0 2.2 -5" direction="alternate" dur="2000" repeat="indefinite"></a-animation>-->
           <!--<a-animation attribute="rotation"
                 dur="10000"
@@ -75,13 +79,13 @@
                 to="360 360 360"
                 repeat="indefinite">
           </a-animation>-->
-        </a-sphere>
-        <a-torus position="-1 -0.5 2" rotation="0 45 0" color="#c20752" metalness=0.5 scale-on-mouseenter="to: 1.2 1.2 1.2" scale-on-mouseleave="to: 1 1 1">
+        <!-- </a-sphere> -->
+        <!-- <a-torus position="-1 -0.5 2" rotation="0 45 0" color="#c20752" metalness=0.5 scale-on-mouseenter="to: 1.2 1.2 1.2" scale-on-mouseleave="to: 1 1 1">
           <a-animation attribute="position" to="-3 8 -10" direction="alternate" dur="4000" repeat="indefinite"></a-animation>
-        </a-torus>
+        </a-torus> -->
         <!--<a-torus-knot position="0.5 6 -5" radius=3.487 radiusTubular=0.579 p=8 q=6 color="#edff0f" metalness=0.5 follow="speed: 2"  scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1">
         </a-torus-knot>-->
-              <a-sphere position="0 0 0" rotation="0 0 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1" cursor-listener >
+              <!-- <a-sphere position="0 0 0" rotation="0 0 0" color="#38e4be" metalness=0.5 scale-on-mouseenter="to: 2 2 2" scale-on-mouseleave="to: 1 1 1" cursor-listener > -->
 
     </a-entity>
 

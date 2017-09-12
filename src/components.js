@@ -46,8 +46,6 @@ AFRAME.registerComponent('cursor-listener', {
   }
 });
 
-
-
 AFRAME.registerComponent('select-on-fuse', {
     schema: {
       to: {default: '2.5 2.5 2.5'}
@@ -73,10 +71,10 @@ AFRAME.registerComponent('follow', {
   },
 
   tick: function (time, timeDelta) {
-    let progress = this.el.getAttribute('position');
-    let toX = progress.x-0.01;
-    let toY = progress.y;
-    let toZ = progress.z+0.01;
+    var progress = this.el.getAttribute('position');
+    var toX = progress.x-0.01;
+    var toY = progress.y;
+    var toZ = progress.z+0.01;
     // console.log(progress);
     this.el.setAttribute('position', {x: toX, y: toY, z: toZ});
     // console.log(this.el.getAttribute('position').x);
@@ -96,10 +94,10 @@ AFRAME.registerComponent('rotate', {
   },
 
   tick: function (time, timeDelta) {
-    let progress = this.el.getAttribute('rotation');
-    let toX = progress.x;
-    let toY = progress.y + 1;
-    let toZ = progress.z;
+    var progress = this.el.getAttribute('rotation');
+    var toX = progress.x;
+    var toY = progress.y + 1;
+    var toZ = progress.z;
     // console.log(progress);
     this.el.setAttribute('rotation', {x: toX, y: toY, z: toZ});
   }
@@ -118,17 +116,17 @@ AFRAME.registerComponent('pump', {
   },
 
   tick: function (time, timeDelta) {
-    let progress = this.el.getAttribute('position');
-    let toX = progress.x;
-    let toY = progress.y;
-    let toZ = progress.z;
+    var progress = this.el.getAttribute('position');
+    var toX = progress.x;
+    var toY = progress.y;
+    var toZ = progress.z;
     // console.log(progress);
     this.el.setAttribute('position', {x: toX, y: toY, z: toZ});
   }
 });
 
-let back = false;
-let reverse = false;
+var back = false;
+var reverse = false;
 AFRAME.registerComponent('follow-circle', {
 
   schema: {
@@ -139,10 +137,10 @@ AFRAME.registerComponent('follow-circle', {
 },
 
   init: function () {
-    let pos = this.el.getAttribute('position');
-    let initX = this.data.rootA - this.data.rootRadius;
-    let initY = this.data.rootB;
-    let initZ = pos.z;
+    var pos = this.el.getAttribute('position');
+    var initX = this.data.rootA - this.data.rootRadius;
+    var initY = this.data.rootB;
+    var initZ = pos.z;
     this.el.setAttribute('position', {x: initX, y: initY, z: initZ});
   },
    update: function () {
@@ -150,10 +148,10 @@ AFRAME.registerComponent('follow-circle', {
   },
 
   tick: function (time, timeDelta) {
-    let progress = this.el.getAttribute('position');
-    let toX;
-    let toY;
-    let toZ = progress.z;
+    var progress = this.el.getAttribute('position');
+    var toX;
+    var toY;
+    var toZ = progress.z;
     
     // console.log(progress.x);
     // console.log(this.data.rootA);

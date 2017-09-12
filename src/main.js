@@ -1,48 +1,51 @@
-let camera = document.getElementById('gameCamera');
-let gameScene = document.getElementById('scene2');
-let portal = document.getElementById('portal');
-let bigDiamond = document.createElement('a-octahedron');
+alert('Kurwa no dziala');
+// import "./components.js"
 
-let pallette = ["rgb(238, 244, 66)","rgb(24, 89, 58)","rgb(89, 24, 46)"];
+var camera = document.getElementById('gameCamera');
+var gameScene = document.getElementById('scene2');
+var portal = document.getElementById('portal');
+var bigDiamond = document.createElement('a-octahedron');
 
-let points = [];
-let platforms = [];
-let score = 0;
-let pointsCount = 0;
-let level = 1;
-let lim = 0; //time limit
+var palette = ["rgb(238, 244, 66)","rgb(24, 89, 58)","rgb(89, 24, 46)"];
 
-let isStarted = false;
-let isWon = false;
-let endPositionZ = 0;
+var points = [];
+var platforms = [];
+var score = 0;
+var pointsCount = 0;
+var level = 1;
+var lim = 0; //time limit
 
-let displayScore = document.getElementById('score');
+var isStarted = false;
+var isWon = false;
+var endPositionZ = 0;
+
+var displayScore = document.getElementById('score');
 
 //camera.setAttribute('animation', anim);
 
-let createSteps = (count) => {
-  let platformCount = count;
-  let radious = 100;
+var createSteps = (count) => {
+  var platformCount = count;
+  var radious = 100;
 
-  let initX = 0.711; 
-  let initY = 41.557;
-  let initZ = -67.131;
+  var initX = 0.711; 
+  var initY = 41.557;
+  var initZ = -67.131;
 
-  let deltaX = 0;
-  let deltaY = 0;
-  let deltaZ = 0;
+  var deltaX = 0;
+  var deltaY = 0;
+  var deltaZ = 0;
 
-  for(let i = 0; i<platformCount; i++){
-    let point;
-    let platform = document.createElement('a-sphere');
+  for(var i = 0; i<platformCount; i++){
+    var point;
+    var platform = document.createElement('a-sphere');
 
     platforms.push(platform);
 
-    let newX = radious*Math.cos(deltaX);
-    let newY = radious*Math.sin(deltaX);
-    let newZ = initZ + deltaZ;
+    var newX = radious*Math.cos(deltaX);
+    var newY = radious*Math.sin(deltaX);
+    var newZ = initZ + deltaZ;
 
-    let newColor = pallette[i%3];
+    var newColor = palette[i%3];
     
     platform.setAttribute('id', 'platform' + i);
     platform.setAttribute('position',{x:newX, y:newY, z:newZ});
@@ -77,7 +80,7 @@ let createSteps = (count) => {
           points.splice(points.indexOf(this),1);
           console.log(score);
           if(score == pointsCount){
-            bigDiamond.setAttribute('material','color', pallette[0]);            
+            bigDiamond.setAttribute('material','color', palette[0]);            
           }
         }     
       })
@@ -88,20 +91,19 @@ let createSteps = (count) => {
     platform.addEventListener('click', function(evt) {
 
       if(isStarted) {
-        let platformPos = platform.getAttribute('position');
-        let anim = document.createElement('a-animation');
+        var platformPos = this.getAttribute('position');
+        //var anim = document.createElement('a-animation');
 
-        anim.setAttribute('attribute', 'position');
-        anim.setAttribute('from', camera.getAttribute('position'));
+        // anim.setAttribute('attribute', 'position');
+        // anim.setAttribute('from', camera.getAttribute('position'));
         //anim.setAttribute('to', ball.getAttribute('position'));
-        anim.setAttribute('dur', 1000);
-        anim.setAttribute('repeat', 1);
-
-        anim.setAttribute('to', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });
-            
+        // anim.setAttribute('dur', 1000);
+        // anim.setAttribute('repeat', 1);
+        // anim.setAttribute('to', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });          
         //camera.appendChild(anim);
-
-
+        console.log("platform");
+        console.log(platformPos);
+        camera.setAttribute('position', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });  
       }     
     })
 
@@ -122,13 +124,13 @@ let createSteps = (count) => {
 }
 
 
-let setPortalPosition = () => {
+var setPortalPosition = () => {
     portal.setAttribute('position', {x: 0, y: 0, z: endPositionZ - 100 } );
     portal.setAttribute('scale', {x: 50, y: 50, z: 20});
     
     bigDiamond.setAttribute('position', {x: 0, y: 0, z: endPositionZ - 100 } );  
     bigDiamond.setAttribute('scale',{x: 8, y: 15, z: 8});
-    bigDiamond.setAttribute('material','color', pallette[2]);
+    bigDiamond.setAttribute('material','color', palette[2]);
     // bigDiamond.setAttribute('scale-on-mouseenter', 'to:3 6 3');
     // bigDiamond.setAttribute('scale-on-mouseleave', 'to:2, 5, 2');
     // bigDiamond.setAttribute('cursor-listener', '');
@@ -145,7 +147,7 @@ let setPortalPosition = () => {
           })
 }
 
-let startButton = document.getElementById('start-button');
+var startButton = document.getElementById('start-button');
 
 startButton.addEventListener('click', function(){
 
@@ -158,9 +160,9 @@ startButton.addEventListener('click', function(){
   }       
 })
 
-let timeOut = (limit) => {
+var timeOut = (limit) => {
   lim = limit;
-  let timer = setInterval(function(){
+  var timer = setInterval(function(){
     lim--;
     displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount 
     + "  Remaining time: " + lim );
@@ -169,7 +171,7 @@ let timeOut = (limit) => {
   },1000)
 }
 
-let restart = () => {
+var restart = () => {
   level = 1;
   score = 0;
   pointsCount = 0;
@@ -179,8 +181,8 @@ let restart = () => {
   generateLevel(level); 
 }
 
-let nextLevel = () => {
-  let limit = 20;
+var nextLevel = () => {
+  var limit = 20;
   level++;
   score = 0;
   pointsCount = 0;
@@ -190,22 +192,22 @@ let nextLevel = () => {
   displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
 }
 
-let moveCameraToBegin = () => {
+var moveCameraToBegin = () => {
   camera.setAttribute('position', '0 0 -60');
   camera.setAttribute('rotation', '0 0 0');
 }
 
-let moveCameraToMenu = () => {
+var moveCameraToMenu = () => {
   camera.setAttribute('position', '0 3 10');
   camera.setAttribute('rotation', '0 0 0');
 }
 
-let clean = () => {
-  for(let point of points){
+var clean = () => {
+  for(var point of points){
       gameScene.removeChild(point);
   }
 
-  for(let platform of platforms){
+  for(var platform of platforms){
     gameScene.removeChild(platform);
   }
 
@@ -216,7 +218,7 @@ let clean = () => {
   points = [];
 }
 
-let generateLevel = (lvl) => {
+var generateLevel = (lvl) => {
     switch(lvl) {
       case(1):{
         createSteps(10);
@@ -243,7 +245,7 @@ let generateLevel = (lvl) => {
         break;
       }
       default:{
-        let dif = lvl+Math.floor(Math.random() * 200 + 100 );
+        var dif = lvl+Math.floor(Math.random() * 200 + 100 );
         createSteps(dif);
         setTimeout(dif*2);
         setPortalPosition();        

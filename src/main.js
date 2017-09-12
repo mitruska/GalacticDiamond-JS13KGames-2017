@@ -1,5 +1,5 @@
-alert('Kurwa no dziala');
 // import "./components.js"
+//import "./3dtext.min.js"
 
 var camera = document.getElementById('gameCamera');
 var gameScene = document.getElementById('scene2');
@@ -18,6 +18,9 @@ var lim = 0; //time limit
 var isStarted = false;
 var isWon = false;
 var endPositionZ = 0;
+var display3dScore = document.getElementById('display3dscore');
+var display3dLevel = document.getElementById('display3dlvl');
+var display3dTime = document.getElementById('display3dtime');
 
 var displayScore = document.getElementById('score');
 
@@ -75,7 +78,9 @@ var createSteps = (count) => {
       point.addEventListener('click', function(evt) {
         if(isStarted){
           score++;
-          displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
+          display3dScore.setAttribute('text-geometry','value', score + '/' + pointsCount);  
+
+          // displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
           gameScene.removeChild(this);
           points.splice(points.indexOf(this),1);
           console.log(score);
@@ -123,14 +128,21 @@ var createSteps = (count) => {
   }
 }
 
-
 var setPortalPosition = () => {
     portal.setAttribute('position', {x: 0, y: 0, z: endPositionZ - 100 } );
     portal.setAttribute('scale', {x: 50, y: 50, z: 20});
     
-    bigDiamond.setAttribute('position', {x: 0, y: 0, z: endPositionZ - 100 } );  
+    bigDiamond.setAttribute('position', {x: 0, y: 10, z: endPositionZ - 100 } );  
     bigDiamond.setAttribute('scale',{x: 8, y: 15, z: 8});
     bigDiamond.setAttribute('material','color', palette[2]);
+
+    display3dScore.setAttribute('position', {x: -30, y: 80, z: endPositionZ - 100 } );
+    display3dTime.setAttribute('position', {x: -30, y: -95, z: endPositionZ - 100 } );
+    display3dLevel.setAttribute('position', {x: -12, y: -28, z: endPositionZ - 100 } );
+
+    display3dTime.setAttribute('material','color', palette[1]);
+    display3dLevel.setAttribute('material','color', palette[2]);
+
     // bigDiamond.setAttribute('scale-on-mouseenter', 'to:3 6 3');
     // bigDiamond.setAttribute('scale-on-mouseleave', 'to:2, 5, 2');
     // bigDiamond.setAttribute('cursor-listener', '');
@@ -154,20 +166,31 @@ startButton.addEventListener('click', function(){
   if(!isStarted){
     camera.setAttribute('position', '0 0 -60');
     camera.setAttribute('rotation', '0 0 0');
-    displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
+
+    display3dScore.setAttribute('text-geometry','value', score + '/' + pointsCount); 
+    display3dLevel.setAttribute('text-geometry','value',  level);
+
+    timeOut(30);
+    // displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
     isStarted = true;
     //clean();
   }       
 })
 
+var timer;
 var timeOut = (limit) => {
   lim = limit;
-  var timer = setInterval(function(){
+  timer = setInterval(function(){
     lim--;
-    displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount 
-    + "  Remaining time: " + lim );
+    display3dTime.setAttribute('text-geometry','value', 'T ' + lim ); 
+
+    // displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount 
+    // + "  Remaining time: " + lim );
     console.log(lim);  
-    if(lim == 0){clearInterval(timer);}
+    if(lim == 0 || lim == -1){
+      clearInterval(this);
+      restart();
+    }
   },1000)
 }
 
@@ -175,7 +198,10 @@ var restart = () => {
   level = 1;
   score = 0;
   pointsCount = 0;
-  started = false;
+  isStarted = false;
+  display3dScore.setAttribute('text-geometry','value', ' ');
+  display3dLevel.setAttribute('text-geometry','value',  ' ');
+  display3dTime.setAttribute('text-geometry','value', ' ' ); 
   clean();
   moveCameraToMenu();
   generateLevel(level); 
@@ -189,7 +215,11 @@ var nextLevel = () => {
   clean();
   moveCameraToBegin();
   generateLevel(level);
-  displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
+  display3dScore.setAttribute('text-geometry','value', score + '/' + pointsCount);
+  display3dLevel.setAttribute('text-geometry','value',  level);
+  display3dTime.setAttribute('text-geometry','value', ' ' );   
+ 
+  // displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
 }
 
 var moveCameraToBegin = () => {
@@ -222,32 +252,37 @@ var generateLevel = (lvl) => {
     switch(lvl) {
       case(1):{
         createSteps(10);
-        //timeOut(10*2);
+        clearInterval(timer);
+        //timeOut(30);
         setPortalPosition();
         break;
       }
       case(2):{
         createSteps(30);
-        timeOut(30*2);
+        clearInterval(timer);
+        timeOut(25);
         setPortalPosition();        
         break;
       }
       case(3):{
         createSteps(50);
-        timeOut(50*2);
+        clearInterval(timer);
+        timeOut(40);
         setPortalPosition();        
         break;
       }
       case(4):{
         createSteps(80);
-        timeOut(80*2);        
+        clearInterval(timer);
+        timeOut(70);        
         setPortalPosition();        
         break;
       }
       default:{
         var dif = lvl+Math.floor(Math.random() * 200 + 100 );
         createSteps(dif);
-        setTimeout(dif*2);
+        clearInterval(timer);
+        timeOut(dif*2);
         setPortalPosition();        
         break;
       }

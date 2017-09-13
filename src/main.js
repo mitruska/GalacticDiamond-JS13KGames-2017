@@ -2,18 +2,19 @@
 //import "./3dtext.min.js"
 
 var camera = document.getElementById('gameCamera');
-var gameScene = document.getElementById('scene2');
+var gameScene = document.getElementById('gameScene');
 var portal = document.getElementById('portal');
 var bigDiamond = document.createElement('a-octahedron');
 
-var palette = ["rgb(238, 244, 66)","rgb(24, 89, 58)","rgb(89, 24, 46)"];
+var palette = ["rgb(238, 244, 66)","rgb(32, 125, 104)","rgb(89, 24, 46)"];
 
 var points = [];
 var platforms = [];
+var stars = [];
 var score = 0;
 var pointsCount = 0;
-var level = 1;
-var lim = 0; //time limit
+var level = 0;
+var lim = 0; 
 
 var isStarted = false;
 var isWon = false;
@@ -22,9 +23,7 @@ var display3dScore = document.getElementById('display3dscore');
 var display3dLevel = document.getElementById('display3dlvl');
 var display3dTime = document.getElementById('display3dtime');
 
-var displayScore = document.getElementById('score');
-
-//camera.setAttribute('animation', anim);
+var displayRestartInfo = document.getElementById('restart-info');
 
 var createSteps = (count) => {
   var platformCount = count;
@@ -41,15 +40,22 @@ var createSteps = (count) => {
   for(var i = 0; i<platformCount; i++){
     var point;
     var platform = document.createElement('a-sphere');
-
+    var star = document.createElement('a-sphere');
+    
+    stars.push(star);
     platforms.push(platform);
 
     var newX = radious*Math.cos(deltaX);
     var newY = radious*Math.sin(deltaX);
     var newZ = initZ + deltaZ;
-
+ 
     var newColor = palette[i%3];
     
+    star.setAttribute('position',{x:newX*1.5, y:newY*1.5, z:newZ});
+    star.setAttribute('material','metalness', '0.1');
+    star.setAttribute('follow', '');
+    gameScene.appendChild(star);
+
     platform.setAttribute('id', 'platform' + i);
     platform.setAttribute('position',{x:newX, y:newY, z:newZ});
     platform.setAttribute('scale',{x: 23.122, y: 4.125, z: 14.093});
@@ -67,12 +73,11 @@ var createSteps = (count) => {
       points.push(point);
 
       point.setAttribute('id', 'platform' + i);
-      point.setAttribute('position',{x:newX-5, y:newY+10, z:newZ});
+      point.setAttribute('position',{x:newX-8, y:newY+10, z:newZ});
       point.setAttribute('scale',{x: 2, y: 5, z: 2});
       point.setAttribute('material','color', '#38e4be');
       point.setAttribute('scale-on-mouseenter', 'to:3 6 3');
       point.setAttribute('scale-on-mouseleave', 'to:2, 5, 2');
-      point.setAttribute('cursor-listener', '');
       point.setAttribute('rotate', '');
 
       point.addEventListener('click', function(evt) {
@@ -94,20 +99,8 @@ var createSteps = (count) => {
     }
 
     platform.addEventListener('click', function(evt) {
-
       if(isStarted) {
         var platformPos = this.getAttribute('position');
-        //var anim = document.createElement('a-animation');
-
-        // anim.setAttribute('attribute', 'position');
-        // anim.setAttribute('from', camera.getAttribute('position'));
-        //anim.setAttribute('to', ball.getAttribute('position'));
-        // anim.setAttribute('dur', 1000);
-        // anim.setAttribute('repeat', 1);
-        // anim.setAttribute('to', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });          
-        //camera.appendChild(anim);
-        console.log("platform");
-        console.log(platformPos);
         camera.setAttribute('position', {x:platformPos.x, y:platformPos.y + 15, z:platformPos.z });  
       }     
     })
@@ -121,10 +114,7 @@ var createSteps = (count) => {
       console.log("set portal position");
       console.log(i);
       console.log(endPositionZ);
-
     }
-
-    console.log("making steps");
   }
 }
 
@@ -132,7 +122,7 @@ var setPortalPosition = () => {
     portal.setAttribute('position', {x: 0, y: 0, z: endPositionZ - 100 } );
     portal.setAttribute('scale', {x: 50, y: 50, z: 20});
     
-    bigDiamond.setAttribute('position', {x: 0, y: 10, z: endPositionZ - 100 } );  
+    bigDiamond.setAttribute('position', {x: 0, y: 11, z: endPositionZ - 100 } );  
     bigDiamond.setAttribute('scale',{x: 8, y: 15, z: 8});
     bigDiamond.setAttribute('material','color', palette[2]);
 
@@ -143,24 +133,21 @@ var setPortalPosition = () => {
     display3dTime.setAttribute('material','color', palette[1]);
     display3dLevel.setAttribute('material','color', palette[2]);
 
-    // bigDiamond.setAttribute('scale-on-mouseenter', 'to:3 6 3');
-    // bigDiamond.setAttribute('scale-on-mouseleave', 'to:2, 5, 2');
-    // bigDiamond.setAttribute('cursor-listener', '');
+    bigDiamond.setAttribute('scale-on-mouseenter', 'to:10 18 10');
+    bigDiamond.setAttribute('scale-on-mouseleave', 'to:8, 15, 8');
     bigDiamond.setAttribute('rotate', '');
  
     bigDiamond.addEventListener('click', function(evt) {
-            if(isStarted){
-              if(score == pointsCount){
-                  nextLevel();
-              }
-              //gameScene.removeChild(this);
-              console.log(score);
-            }     
-          })
+        if(isStarted){
+          if(score == pointsCount){
+              nextLevel();
+          }
+          console.log(score);
+        }     
+      })
 }
 
 var startButton = document.getElementById('start-button');
-
 startButton.addEventListener('click', function(){
 
   if(!isStarted){
@@ -170,10 +157,8 @@ startButton.addEventListener('click', function(){
     display3dScore.setAttribute('text-geometry','value', score + '/' + pointsCount); 
     display3dLevel.setAttribute('text-geometry','value',  level);
 
-    timeOut(30);
-    // displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
     isStarted = true;
-    //clean();
+    nextLevel();
   }       
 })
 
@@ -183,10 +168,7 @@ var timeOut = (limit) => {
   timer = setInterval(function(){
     lim--;
     display3dTime.setAttribute('text-geometry','value', 'T ' + lim ); 
-
-    // displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount 
-    // + "  Remaining time: " + lim );
-    console.log(lim);  
+    
     if(lim == 0 || lim == -1){
       clearInterval(this);
       restart();
@@ -195,13 +177,16 @@ var timeOut = (limit) => {
 }
 
 var restart = () => {
-  level = 1;
+  level = 0;
   score = 0;
   pointsCount = 0;
   isStarted = false;
   display3dScore.setAttribute('text-geometry','value', ' ');
   display3dLevel.setAttribute('text-geometry','value',  ' ');
   display3dTime.setAttribute('text-geometry','value', ' ' ); 
+  
+  displayRestartInfo.setAttribute('text','value', 'BE FASTER' ); 
+  
   clean();
   moveCameraToMenu();
   generateLevel(level); 
@@ -218,8 +203,6 @@ var nextLevel = () => {
   display3dScore.setAttribute('text-geometry','value', score + '/' + pointsCount);
   display3dLevel.setAttribute('text-geometry','value',  level);
   display3dTime.setAttribute('text-geometry','value', ' ' );   
- 
-  // displayScore.setAttribute('text','value', 'Level: ' + level + '  score: ' + score + ' / ' + pointsCount);  
 }
 
 var moveCameraToBegin = () => {
@@ -241,26 +224,35 @@ var clean = () => {
     gameScene.removeChild(platform);
   }
 
-  // gameScene.removeChild(bigDiamond);
-  // gameScene.removeChild(portal);
-
   platforms = [];
   points = [];
+
+  if(stars.length>1000){
+    for(var i=0; i<500; i++){
+      stars.splice(stars[i],1);
+      gameScene.removeChild(star[i]);
+    }
+  }
 }
 
 var generateLevel = (lvl) => {
     switch(lvl) {
+      case(0):{
+        createSteps(50);
+        setPortalPosition();
+        break;
+      }
       case(1):{
         createSteps(10);
         clearInterval(timer);
-        //timeOut(30);
+        timeOut(25);
         setPortalPosition();
         break;
       }
       case(2):{
         createSteps(30);
         clearInterval(timer);
-        timeOut(25);
+        timeOut(30);
         setPortalPosition();        
         break;
       }
@@ -287,11 +279,9 @@ var generateLevel = (lvl) => {
         break;
       }
     }
-
 } 
 
 window.onload= function () {
-  generateLevel(1);
+  generateLevel(0);
   gameScene.appendChild(bigDiamond);  
-  //setPortalPosition(); 
 }

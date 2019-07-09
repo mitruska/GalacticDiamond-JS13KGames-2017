@@ -8,3 +8,7 @@ Just gaze at things and start looking for lost diamonds.
 Hint: Sometimes You have to get closer.
 
 Available on VR, mobile and desktop (drag and drop).
+
+Competition page: https://js13kgames.com/entries/galacticdiamond
+
+Play here: https://js13kgames.com/games/galacticdiamond/index.html
